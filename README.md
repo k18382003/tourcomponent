@@ -1,46 +1,127 @@
-# Getting Started with Create React App
+# Tour Cards
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Learning Goal
+Understand how React UseEffect() works. And also, understand how to use Short-Circuit Evaluation and Ternary Operator in React.
 
-## Available Scripts
+## Steps
 
-In the project directory, you can run:
+#### Create an external Interface object Tour
 
-### `npm start`
+```jsx
+export default interface Tour {
+    id : string,
+    name : string,
+    info : string,
+    image : string,
+    price : string
+}
+```
+Not to repeat yourself, we can create an external object in the project. 
+And simply import it when we need it.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Setup State Variable
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```jsx
+const [loading, setLoading] = useState(true);
+const [tourData, setTourData] = useState([{
+    id : "",
+    name : "",
+    info : "",
+    image : "",
+    price : ""
+  }]);
+```
+loading is storing the data-fetching state. If it's still fetching the data which is true, and vice versa. 
+tourData is storing the fetched data.
 
-### `npm test`
+#### Fetch Data
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Declare a data source, and create a fetch function.
+```jsx
+const tourDataUrl = "https://course-api.com/react-tours-project";
 
-### `npm run build`
+const fetchTours = async() => {
+    try {
+      var tours = await fetch(tourDataUrl);
+      var jsonTours = await tours.json();
+      setTourData(jsonTours);
+    } catch (error) {
+      console.log(error);
+      return <h1>Oops! Something went wrong. Please refresh the page.</h1>
+    }
+    setLoading(false);
+  }
+```
+Once the fetching is completed, we can set our loading state to false.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### UseEffect()
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```jsx
+useEffect(() => {
+    fetchTours();
+  }, [])
+```
+We want to fetch the data at the initial loading, so the second parameter of useEffect we need to give an empty array.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Page loading status
+```jsx
+  if (loading) return <Loading />;
+```
 
-### `npm run eject`
+```jsx
+export default function Loading() {
+    return (
+        <div className="loading-container">
+            <div className="loading"></div>
+        </div>
+    )
+}
+```
+return a Loading component if we are still fetching the data.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Iterate and Render and diplay by nested components
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Same as the Birthday List project. 
+Display the number of items in the tourData by using the length property of the state variable. To render the list of tour, iterate over the data array using the map method. 
+Create a Tours component to hold the rendered items and they also contain the list of Tour components.
+Create a Tour component to render the information of the tour's details.
+We should passing People object as a prop from the parent to each child component.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Remove tour function
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```jsx
+const removeTour = (id: string) => {
+  var newTours = tourData.filter(t => t.id !== id);
+  setTourData(newTours);
+}
+```
+Use filter function to remove the not interested tour, and set our TourData to the filtered list.
 
-## Learn More
+#### Short Circuit and Ternary Operator
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Use the ternary operator to achieve showing content by conditions.
+If readMore is true then we show the full content, otherwise just show the first 200 words.
+```jsx
+ <div className="tour-info">
+      <h5 className="tour-title">{tour.name}</h5>
+      <p>{readMore ? tour.info : `${tour.info.substring(0, 200) + "..."}`}
+          <span className="info-btn" onClick={() => setReadMore(!readMore)}>
+              {readMore ? " Read Less" : "Read More"}
+          </span>
+      </p>
+  </div>
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+By the rule of short-circuit evaluation, the && operator (logical AND) returns the first operand if it is "falsy", or the second operand if the first operand is "truthy".
+```jsx
+<div className='title'>
+  <h3>Summer Tours</h3>
+  <div className="title-underline"></div>
+  {tourData.length === 0 &&
+    <button className="btn" style={{marginTop: '1rem'}} onClick={fetchTours}>Refresh</button> 
+  }
+</div>
+```
+
+##### Learning source 
+https://www.udemy.com/course/react-tutorial-and-projects-course/?kw=React+18+tu&src=sac#
