@@ -36,7 +36,7 @@ function App() {
     var newTours = tourData.filter(t => t.id !== id);
     setTourData(newTours);
   }
-  
+
   if (loading) return <Loading />;
 
   return (
