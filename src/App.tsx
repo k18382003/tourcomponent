@@ -2,21 +2,22 @@ import React, { Fragment, useEffect, useState } from 'react';
 import './App.css';
 import Loading from './Loading';
 import Tours from './Tours';
+import Footer from './footer';
 
 const tourDataUrl = "https://course-api.com/react-tours-project";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [tourData, setTourData] = useState([{
-    id : "",
-    name : "",
-    info : "",
-    image : "",
-    price : ""
+    id: "",
+    name: "",
+    info: "",
+    image: "",
+    price: ""
   }]);
-  
 
-  const fetchTours = async() => {
+
+  const fetchTours = async () => {
     try {
       var tours = await fetch(tourDataUrl);
       var jsonTours = await tours.json();
@@ -27,7 +28,7 @@ function App() {
     }
     setLoading(false);
   }
-  
+
   useEffect(() => {
     fetchTours();
   }, [])
@@ -45,12 +46,13 @@ function App() {
         <h3>Summer Tours</h3>
         <div className="title-underline"></div>
         {tourData.length === 0 &&
-          <button className="btn" style={{marginTop: '1rem'}} onClick={fetchTours}>Refresh</button> 
+          <button className="btn" style={{ marginTop: '1rem' }} onClick={fetchTours}>Refresh</button>
         }
       </div>
       <main>
-          <Tours tours={tourData} removeTour={removeTour}/>
+        <Tours tours={tourData} removeTour={removeTour} />
       </main>
+      <Footer />
     </>
   );
 }

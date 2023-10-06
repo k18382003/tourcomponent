@@ -236,7 +236,6 @@ ul {
   justify-content: center;
 }
 
-
 .loading {
   width: 6rem;
   height: 6rem;
@@ -352,4 +351,39 @@ main {
   .tours {
     grid-template-columns: 1fr 1fr 1fr;
   }
+}
+
+/*
+=============== 
+Footer
+===============
+*/
+.footer {
+  text-align: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.footer-links,
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.footer-link {
+  color: var(--primary-900);
+  text-transform: capitalize;
+  font-size: 1rem;
+  margin-right: 1rem;
+  letter-spacing: var(--spacing);
+  transition: var(--transition);
+}
+.footer-link:hover {
+  color: var(--primary-500);
+}
+.footer-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+  color: var(--primary-900);
+  transition: var(--transition);
 }
