@@ -3,8 +3,9 @@ import './App.css';
 import Loading from './Loading';
 import Tours from './Tours';
 import Footer from './footer';
+import TourData from './data/data.json';
 
-const tourDataUrl = "https://course-api.com/react-tours-project";
+const tourDataUrl = "https://www.course-api.com/react-tours-project";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -15,6 +16,7 @@ function App() {
     image: "",
     price: ""
   }]);
+  const [hasError, setError] = useState(false);
 
 
   const fetchTours = async () => {
@@ -24,7 +26,7 @@ function App() {
       setTourData(jsonTours);
     } catch (error) {
       console.log(error);
-      return <h1>Oops! Something went wrong. Please refresh the page.</h1>
+      setTourData(TourData);
     }
     setLoading(false);
   }
